@@ -88,7 +88,7 @@ router.route('/posts/:post_id')
     })
     .delete(function(req, res) {
         Post.remove({
-            _id: req.params.id
+            _id: req.params.post_id
         }, function(err, post) {
             if(err) {
                 res.send(err);
