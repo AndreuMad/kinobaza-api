@@ -85,6 +85,17 @@ router.route('/posts/:post_id')
 
             res.json({ message: 'Post updated' });
         });
+    })
+    .delete(function(req, res) {
+        Post.remove({
+            _id: req.params.id
+        }, function(err, post) {
+            if(err) {
+                res.send(err);
+            }
+
+            res.json({ message: 'Successfully deleted' });
+        });
     });
 
 app.use('/api', router);
