@@ -48,7 +48,7 @@ router.route('/posts/:post_id')
 
 // Titles
 router.route('/titles')
-    .get(titlesRoutes.getTitle)
+    .get(titlesRoutes.getTitles)
     .post(titlesRoutes.postTitle);
 
 // Single title

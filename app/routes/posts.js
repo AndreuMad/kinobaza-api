@@ -24,7 +24,11 @@ const getPosts = function(req, res) {
     Post.find()
         .skip(skip)
         .limit(limit)
-        .select('title')
+        .select([
+            'id',
+            'title',
+            'image'
+        ])
         .exec(function(err, posts) {
             if(err) {
                 res.send(err);
