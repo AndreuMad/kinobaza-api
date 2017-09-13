@@ -6,6 +6,14 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const Post = require('./app/models/post');
 
+const postsPost = require('./app/routes/post');
+const getPosts = require('./app/routes/post');
+const getPost = require('./app/routes/post');
+const putPost = require('./app/routes/post');
+const deletePost = require('./app/routes/post');
+
+// "C:\Program Files\MongoDB\Server\3.4\bin\mongod"
+
 mongoose.connect('mongodb://localhost/restfull-api');
 
 // configure app to use bodyParser()
@@ -33,70 +41,14 @@ router.use(function(req, res, next) {
 
 // Posts
 router.route('/posts')
-    .post(function(req, res) {
-        var post = new Post({
-            title:req.body.title,
-            text:req.body.text
-        });
-
-        post.save(function(err) {
-            if(err) {
-                res.send(err);
-            }
-
-            res.json({ message: 'Post created' });
-        });
-    })
-    .get(function(req, res) {
-        Post.find(function(err, posts) {
-            if(err) {
-                res.send(err);
-            }
-
-            res.json(posts);
-        })
-    });
+    .post(postsPost)
+    .get(getPosts);
 
 // Single post
 router.route('/posts/:post_id')
-    .get(function(req, res) {
-        Post.findById(req.params.post_id, function(err, post) {
-            if(err) {
-                res.send(err);
-            }
-
-            res.json(post);
-        });
-    })
-    .put(function(req, res) {
-        Post.findById(req.params.post_id, function(err, post) {
-            if(err) {
-                res.send(err);
-            }
-
-            post.title = req.body.title;
-            post.text = req.body.text;
-
-            post.save(function(err) {
-                if(err) {
-                    res.send(err);
-                }
-            });
-
-            res.json({ message: 'Post updated' });
-        });
-    })
-    .delete(function(req, res) {
-        Post.remove({
-            _id: req.params.post_id
-        }, function(err, post) {
-            if(err) {
-                res.send(err);
-            }
-
-            res.json({ message: 'Successfully deleted' });
-        });
-    });
+    .get(getPost)
+    .put(putPost)
+    .delete(deletePost);
 
 app.use('/api', router);
 
