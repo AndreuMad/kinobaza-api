@@ -1,8 +1,10 @@
 const Post =  require('../models/post');
 
-const postsPost = function(req, res) {
+const postPost = function(req, res) {
     var post = new Post({
+        image: req.body.image,
         title: req.body.title,
+        date: req.body.date,
         text: req.body.text
     });
 
@@ -73,8 +75,10 @@ const deletePost = function(req, res) {
     });
 };
 
-module.exports = postsPost;
-module.exports = getPosts;
-module.exports = getPost;
-module.exports = putPost;
-module.exports = deletePost;
+module.exports = {
+    postPost: postPost,
+    getPosts: getPosts,
+    getPost: getPost,
+    putPost: putPost,
+    deletePost: deletePost
+};

@@ -4,17 +4,13 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const Post = require('./app/models/post');
 
-const postsPost = require('./app/routes/post');
-const getPosts = require('./app/routes/post');
-const getPost = require('./app/routes/post');
-const putPost = require('./app/routes/post');
-const deletePost = require('./app/routes/post');
+const postsRoutes = require('./app/routes/posts');
+const titlesRoutes = require('./app/routes/titles');
 
 // "C:\Program Files\MongoDB\Server\3.4\bin\mongod"
 
-mongoose.connect('mongodb://localhost/restfull-api');
+mongoose.connect('mongodb://localhost/kinobaza');
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -41,14 +37,25 @@ router.use(function(req, res, next) {
 
 // Posts
 router.route('/posts')
-    .post(postsPost)
-    .get(getPosts);
+    .get(postsRoutes.getPosts)
+    .post(postsRoutes.postPost);
 
 // Single post
 router.route('/posts/:post_id')
-    .get(getPost)
-    .put(putPost)
-    .delete(deletePost);
+    .get(postsRoutes.getPost)
+    .put(postsRoutes.putPost)
+    .delete(postsRoutes.deletePost);
+
+// Titles
+router.route('/titles')
+    .get(titlesRoutes.getTitle)
+    .post(titlesRoutes.postTitle);
+
+// Single title
+router.route('/titles/:title_id')
+    .get(titlesRoutes.getTitle)
+    .put(titlesRoutes.putTitle)
+    .delete(titlesRoutes.deleteTitle);
 
 app.use('/api', router);
 
