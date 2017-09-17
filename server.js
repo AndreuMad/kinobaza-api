@@ -1,12 +1,25 @@
 // BASE SETUP
 // =============================================================================
 const express = require('express');
-const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const passport = require('passport');
+const morgan = require('morgan');
+
+const app = express();
 
 const postsRoutes = require('./app/routes/posts');
 const titlesRoutes = require('./app/routes/titles');
+
+const authentication = require('./app/routes/authentication');
+const tokenLogin = require('./app/services/passport').tokenLogin;
+const credentialLogin = require('./app/services/passport').credentialLogin;
+const requireAuth = passport.authenticate('jwt', { session: false });
+const requireSignin = passport.authenticate('local', { session: false });
+
+passport.use(tokenLogin);
+passport.use(credentialLogin);
+
 
 // "C:\Program Files\MongoDB\Server\3.4\bin\mongod"
 
@@ -14,6 +27,7 @@ mongoose.connect('mongodb://localhost/kinobaza');
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
+app.use(morgan('combined'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -34,6 +48,17 @@ router.use(function(req, res, next) {
     console.log('request was made');
     next();
 });
+
+router.route('/')
+    .get(requireAuth, function(req, res) {
+        res.send({ hi: 'there' });
+    });
+
+router.route('/signin')
+    .post(requireSignin, authentication.signinPost);
+
+router.route('/signup')
+    .post(authentication.signupPost);
 
 // Posts
 router.route('/posts')
