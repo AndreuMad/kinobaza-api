@@ -55,10 +55,10 @@ router.route('/')
     });
 
 router.route('/signin')
-    .post(requireSignin, authentication.signinPost);
+    .post(requireSignin, authentication.signin);
 
 router.route('/signup')
-    .post(authentication.signupPost);
+    .post(authentication.signup);
 
 // Posts
 router.route('/posts')
