@@ -57,7 +57,14 @@ const signin = function(req, res, next) {
     });
 };
 
+const signToken = function(req, res, next) {
+    res.send({
+        name: req.user.name
+    });
+};
+
 module.exports = {
     signup: signup,
-    signin: signin
+    signin: signin,
+    signToken: signToken
 };

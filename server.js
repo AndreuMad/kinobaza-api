@@ -34,7 +34,7 @@ app.use(bodyParser.json());
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header('Access-Control-Allow-Methods', 'GET,POST,DELETE');
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     next();
 });
 
@@ -49,13 +49,9 @@ router.use(function(req, res, next) {
     next();
 });
 
-router.route('/')
-    .get(requireAuth, function(req, res) {
-        res.send({ hi: 'there' });
-    });
-
 router.route('/signin')
-    .post(requireSignin, authentication.signin);
+    .post(requireSignin, authentication.signin)
+    .get(requireAuth, authentication.signToken);
 
 router.route('/signup')
     .post(authentication.signup);
