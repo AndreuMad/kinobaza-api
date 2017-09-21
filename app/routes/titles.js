@@ -20,10 +20,15 @@ const postTitle = function(req, res) {
 };
 
 const getTitles = function(req, res) {
-    var limit = +req.query.limit || 5;
+    var limit = +req.query.limit || 10;
     var skip = +req.query.skip || 0;
 
-    Title.find()
+    var year = req.query.year ? JSON.parse(req.query.year) : { min: 1878, max: 2017 };
+    console.log('lol');
+
+    Title.find({
+        year: { $gt: year.min, $lt: year.max }
+    })
         .skip(skip)
         .limit(limit)
         .exec(function(err, titles) {
