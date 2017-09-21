@@ -23,11 +23,14 @@ const getTitles = function(req, res) {
     var limit = +req.query.limit || 10;
     var skip = +req.query.skip || 0;
 
+    var name = req.query.name ? req.query.name : '';
+    var genres = req.query.genres ? req.query.genres : [];
     var year = req.query.year ? JSON.parse(req.query.year) : { min: 1878, max: 2017 };
-    console.log('lol');
 
     Title.find({
+        "name.en": { "$regex": name, "$options": "i" },
         year: { $gt: year.min, $lt: year.max }
+        //_.includes
     })
         .skip(skip)
         .limit(limit)
