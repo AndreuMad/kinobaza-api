@@ -23,15 +23,37 @@ const getTitles = function(req, res) {
     var limit = +req.query.limit || 10;
     var skip = +req.query.skip || 0;
 
-    var name = req.query.name ? req.query.name : '';
-    var genres = req.query.genres ? req.query.genres : [];
-    var year = req.query.year ? JSON.parse(req.query.year) : { min: 1878, max: 2017 };
+    var name = req.query.name;
+    var genre = req.query.genre;
+    var year = req.query.year ? JSON.parse(req.query.year) : null;
+    var score = req.query.score ? JSON.parse(req.query.score) : null;
+    var query = {};
+    if(name) {
+        query = Object.assign({
+            $or: [
+                { "name.en": { "$regex": name, "$options": "i" } },
+                { "name.ukr": { "$regex": name, "$options": "i" } }
+            ]
+        },
+        query);
+    }
 
-    Title.find({
-        "name.en": { "$regex": name, "$options": "i" },
-        year: { $gt: year.min, $lt: year.max }
-        //_.includes
-    })
+    if(genre) {
+        query.genre = { $all: genre };
+    }
+
+    if(year) {
+        console.log(year);
+        query.year = { $gt: year.min, $lt: year.max };
+    }
+
+    if(score) {
+        query["score.imdb"] = { $gt: score.min, $lt: score.max };
+    }
+
+    Title.find(
+        query
+    )
         .skip(skip)
         .limit(limit)
         .exec(function(err, titles) {
