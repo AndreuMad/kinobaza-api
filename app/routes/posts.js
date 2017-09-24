@@ -27,7 +27,8 @@ const getPosts = function(req, res) {
         .select([
             'id',
             'title',
-            'image'
+            'image',
+            'important'
         ])
         .exec(function(err, posts) {
             if(err) {

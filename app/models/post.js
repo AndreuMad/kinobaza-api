@@ -7,7 +7,8 @@ const PostSchema = new Schema({
     },
     title: String,
     date: String,
-    text: String
+    text: String,
+    important: Boolean
 });
 
 module.exports = mongoose.model('Post', PostSchema);
