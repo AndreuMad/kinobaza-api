@@ -27,7 +27,10 @@ const getTitles = function(req, res) {
     var genre = req.query.genre;
     var year = req.query.year ? JSON.parse(req.query.year) : null;
     var score = req.query.score ? JSON.parse(req.query.score) : null;
+
+    var count;
     var query = {};
+
     if(name) {
         query = Object.assign({
             $or: [
@@ -51,6 +54,11 @@ const getTitles = function(req, res) {
         query["score.imdb"] = { $gt: score.min, $lt: score.max };
     }
 
+    Title.count(query)
+        .exec(function(err, titles){
+            count = titles
+        });
+
     Title.find(
         query
     )
@@ -61,7 +69,10 @@ const getTitles = function(req, res) {
                 res.send(err);
             }
 
-            res.json(titles);
+            res.json({
+                titles: titles,
+                count: count
+            });
         });
 };
 
