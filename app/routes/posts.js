@@ -21,6 +21,13 @@ const getPosts = function(req, res) {
     var limit = +req.query.limit || 10;
     var skip = +req.query.skip || 0;
 
+    var count;
+
+    Post.count({})
+        .exec(function(err, posts) {
+            count = posts;
+        });
+
     Post.find()
         .skip(skip)
         .limit(limit)
@@ -35,7 +42,10 @@ const getPosts = function(req, res) {
                 res.send(err);
             }
 
-            res.json(posts);
+            res.json({
+                posts: posts,
+                count: count
+            });
         });
 };
 
