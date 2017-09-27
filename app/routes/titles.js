@@ -20,7 +20,7 @@ const postTitle = function(req, res) {
 };
 
 const getTitles = function(req, res) {
-    var limit = +req.query.limit || 10;
+    var limit = +req.query.limit || 3;
     var skip = +req.query.skip || 0;
 
     var name = req.query.name;
