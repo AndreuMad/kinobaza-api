@@ -8,6 +8,7 @@ const PostSchema = new Schema({
     title: String,
     date: String,
     text: String,
+    textArticle: String,
     important: Boolean
 });
 
