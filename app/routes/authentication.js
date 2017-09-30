@@ -41,6 +41,7 @@ const signup = function(req, res, next) {
             }
 
             res.json({
+                id: user._id,
                 name: user.name,
                 token: tokenForUser(user)
             });
@@ -52,6 +53,7 @@ const signin = function(req, res, next) {
     // User has already had their email and password auth'd
     // We just need to give them a token
     res.send({
+        id: req.user._id,
         name: req.user.name,
         token: tokenForUser(req.user)
     });
@@ -59,6 +61,7 @@ const signin = function(req, res, next) {
 
 const signToken = function(req, res, next) {
     res.send({
+        id: req.user._id,
         name: req.user.name
     });
 };
