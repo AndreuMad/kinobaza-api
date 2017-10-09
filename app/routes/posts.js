@@ -24,7 +24,7 @@ const getPosts = function(req, res) {
     var count;
 
     Post.count({})
-        .exec(function(err, posts) {
+        .then((posts) => {
             count = posts;
         });
 
@@ -37,26 +37,26 @@ const getPosts = function(req, res) {
             'image',
             'important'
         ])
-        .exec(function(err, posts) {
-            if(err) {
-                res.send(err);
-            }
+        .then((posts) => {
 
             res.json({
                 posts: posts,
                 count: count
             });
+        })
+        .catch((error) => {
+            res.send(error);
         });
 };
 
 const getPost = function(req, res) {
-    Post.findById(req.params.post_id, function(err, post) {
-        if(err) {
-            res.send(err);
-        }
-
-        res.json(post);
-    });
+    Post.findById(req.params.post_id)
+        .then((post) => {
+            res.json(post);
+        })
+        .catch((error) => {
+            res.send(error);
+        });
 };
 
 const putPost = function(req, res) {
