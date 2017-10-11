@@ -1,7 +1,7 @@
 const Title =  require('../models/title');
 
 const postTitle = function(req, res) {
-    var title = new Title({
+    const title = new Title({
         title: req.body.title,
         genre: req.body.genre,
         image: req.body.image,
@@ -10,26 +10,22 @@ const postTitle = function(req, res) {
         text: req.body.text
     });
 
-    title.save(function(err) {
-        if(err) {
-            res.send(err);
-        }
-
-        res.json({ message: 'Title created' });
-    });
+    title.save()
+        .then(() => res.json({ message: 'Title created' }))
+        .catch(error => res.send(error));
 };
 
 const getTitles = function(req, res) {
-    var limit = +req.query.limit || 3;
-    var skip = +req.query.skip || 0;
+    const limit = +req.query.limit || 3;
+    const skip = +req.query.skip || 0;
 
-    var name = req.query.name;
-    var genre = req.query.genre;
-    var year = req.query.year ? JSON.parse(req.query.year) : null;
-    var score = req.query.score ? JSON.parse(req.query.score) : null;
+    const name = req.query.name;
+    const genre = req.query.genre;
+    const year = req.query.year ? JSON.parse(req.query.year) : null;
+    const score = req.query.score ? JSON.parse(req.query.score) : null;
 
-    var count;
-    var query = {};
+    let count;
+    let query = {};
 
     if(name) {
         query = Object.assign({
@@ -54,26 +50,17 @@ const getTitles = function(req, res) {
         query["score.imdb"] = { $gt: score.min, $lt: score.max };
     }
 
-    Title.count(query)
-        .exec(function(err, titles){
-            count = titles
-        });
-
-    Title.find(
-        query
-    )
-        .skip(skip)
-        .limit(limit)
-        .exec(function(err, titles) {
-            if(err) {
-                res.send(err);
-            }
-
+    Promise.all([
+        Title.count(query),
+        Title.find(query).skip(skip).limit(limit)
+    ])
+        .then((values) => {
             res.json({
-                titles: titles,
-                count: count
+                count: values[0],
+                titles: values[1]
             });
-        });
+        })
+        .catch(error => res.send(error))
 };
 
 const getTitle = function(req, res) {

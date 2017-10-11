@@ -1,27 +1,25 @@
 const Post =  require('../models/post');
 
 const postPost = function(req, res) {
-    var post = new Post({
+    const post = new Post({
         image: req.body.image,
         title: req.body.title,
         date: req.body.date,
         text: req.body.text
     });
 
-    post.save(function(err) {
-        if(err) {
-            res.send(err);
-        }
-
-        res.json({ message: 'Post created' });
-    });
+    post.save()
+        .then(() => res.json({ message: 'Post created' }))
+        .catch((error) => {
+            res.send(error);
+        });
 };
 
 const getPosts = function(req, res) {
-    var limit = +req.query.limit || 10;
-    var skip = +req.query.skip || 0;
+    const limit = +req.query.limit || 10;
+    const skip = +req.query.skip || 0;
 
-    var count;
+    let count;
 
     Post.count({})
         .then((posts) => {
