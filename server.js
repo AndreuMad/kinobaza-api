@@ -75,7 +75,7 @@ router.route('/titles')
 // Single title
 router.route('/titles/:title_id')
     .get(titlesRoutes.getTitle)
-    .put(titlesRoutes.putTitle)
+    .put(titlesRoutes.editTitle)
     .delete(titlesRoutes.deleteTitle);
 
 app.use('/api', router);

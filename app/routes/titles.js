@@ -1,16 +1,21 @@
 const Title =  require('../models/title');
 
+const getTitleQuery = require('../queries/titles/getTitle');
+const postTitleQuery = require('../queries/titles/postTitle');
+const editTitleQuery = require('../queries/titles/editTitle');
+const deleteTitleQuery = require('../queries/titles/deleteTitle');
+
 const postTitle = function(req, res) {
-    const title = new Title({
+    const query = {
         title: req.body.title,
         genre: req.body.genre,
         image: req.body.image,
         year: req.body.year,
         score: req.body.score,
         text: req.body.text
-    });
+    };
 
-    title.save()
+    postTitleQuery(query)
         .then(() => res.json({ message: 'Title created' }))
         .catch(error => res.send(error));
 };
@@ -23,18 +28,20 @@ const getTitles = function(req, res) {
     const genre = req.query.genre;
     const year = req.query.year ? JSON.parse(req.query.year) : null;
     const score = req.query.score ? JSON.parse(req.query.score) : null;
+    const sort = req.query.sort || 'name';
 
-    let count;
     let query = {};
 
     if(name) {
-        query = Object.assign({
-            $or: [
-                { "name.en": { "$regex": name, "$options": "i" } },
-                { "name.ukr": { "$regex": name, "$options": "i" } }
-            ]
-        },
-        query);
+        query = Object.assign(
+            {
+                $or: [
+                    { "name.en": { "$regex": name, "$options": "i" } },
+                    { "name.ukr": { "$regex": name, "$options": "i" } }
+                ]
+            },
+            query
+        );
     }
 
     if(genre) {
@@ -42,7 +49,6 @@ const getTitles = function(req, res) {
     }
 
     if(year) {
-        console.log(year);
         query.year = { $gt: year.min, $lt: year.max };
     }
 
@@ -52,7 +58,7 @@ const getTitles = function(req, res) {
 
     Promise.all([
         Title.count(query),
-        Title.find(query).skip(skip).limit(limit)
+        Title.find(query).skip(skip).limit(limit).sort([[sort, -1]])
     ])
         .then((values) => {
             res.json({
@@ -64,54 +70,27 @@ const getTitles = function(req, res) {
 };
 
 const getTitle = function(req, res) {
-    Title.findById(req.params.title_id, function(err, title) {
-        if(err) {
-            res.send(err);
-        }
-
-        res.json(title);
-    });
+    getTitleQuery(req.params.title_id)
+        .then(title => res.json(title))
+        .catch(error => res.send(error));
 };
 
-const putTitle = function(req, res) {
-    Title.findById(req.params.title_id, function(err, title) {
-        if(err) {
-            res.send(err);
-        }
-
-        title.title = req.body.title;
-        title.genre = req.body.genre;
-        title.image = req.body.image;
-        title.year = req.body.year;
-        title.score = req.body.score;
-        title.text = req.body.text;
-
-        title.save(function(err) {
-            if(err) {
-                res.send(err);
-            }
-        });
-
-        res.json({ message: 'Title updated' });
-    });
+const editTitle = function(req, res) {
+    editTitleQuery(req.params.title_id, req.body)
+        .then(() => res.json({ message: 'Title updated' }))
+        .catch(error => res.send(error));
 };
 
 const deleteTitle = function(req, res) {
-    Title.remove({
-        _id: req.params.title_id
-    }, function(err, title) {
-        if(err) {
-            res.send(err);
-        }
-
-        res.json({ message: 'Successfully deleted' });
-    });
+    deleteTitleQuery(req.params.title_id)
+        .then(() => res.json({ message: 'Successfully deleted' }))
+        .catch(error => res.send(error));
 };
 
 module.exports = {
     postTitle: postTitle,
     getTitles: getTitles,
     getTitle: getTitle,
-    putTitle: putTitle,
+    editTitle: editTitle,
     deleteTitle: deleteTitle
 };

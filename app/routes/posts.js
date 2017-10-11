@@ -66,26 +66,18 @@ const putPost = function(req, res) {
         post.title = req.body.title;
         post.text = req.body.text;
 
-        post.save(function(err) {
-            if(err) {
-                res.send(err);
-            }
-        });
-
-        res.json({ message: 'Post updated' });
-    });
+        post.save()
+            .then(() => res.json({ message: 'Post updated' }))
+            .catch((error) => res.send(error));
+    })
 };
 
 const deletePost = function(req, res) {
     Post.remove({
         _id: req.params.post_id
-    }, function(err, post) {
-        if(err) {
-            res.send(err);
-        }
-
-        res.json({ message: 'Successfully deleted' });
-    });
+    })
+        .then(() => res.json({ message: 'Successfully deleted' }))
+        .catch((error) => res.send(error));
 };
 
 module.exports = {
