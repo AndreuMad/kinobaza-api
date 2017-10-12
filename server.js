@@ -24,6 +24,7 @@ passport.use(credentialLogin);
 // "C:\Program Files\MongoDB\Server\3.4\bin\mongod"
 
 mongoose.connect('mongodb://localhost/kinobaza');
+mongoose.Promise = global.Promise;
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST

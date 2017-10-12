@@ -1,6 +1,7 @@
 const Title =  require('../models/title');
 
 const getTitleQuery = require('../queries/titles/getTitle');
+const getTitlesQuery = require('../queries/titles/getTitles');
 const postTitleQuery = require('../queries/titles/postTitle');
 const editTitleQuery = require('../queries/titles/editTitle');
 const deleteTitleQuery = require('../queries/titles/deleteTitle');
@@ -56,17 +57,26 @@ const getTitles = function(req, res) {
         query["score.imdb"] = { $gt: score.min, $lt: score.max };
     }
 
-    Promise.all([
-        Title.count(query),
-        Title.find(query).skip(skip).limit(limit).sort([[sort, -1]])
-    ])
-        .then((values) => {
-            res.json({
-                count: values[0],
-                titles: values[1]
-            });
+    getTitlesQuery({ query, skip, limit, sort })
+        .then(result => {
+
+            if(result.length) {
+                res.json({
+                    count: result[0].total,
+                    year: {
+                        min: result[0].minYear,
+                        max: result[0].maxYear
+                    },
+                    titles: result
+                });
+            } else {
+                res.json({
+                    count: 0,
+                    titles: result
+                })
+            }
         })
-        .catch(error => res.send(error))
+        .catch(error => res.send(error));
 };
 
 const getTitle = function(req, res) {
