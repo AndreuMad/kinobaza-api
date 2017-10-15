@@ -63,9 +63,11 @@ const getTitles = function(req, res) {
             if(result.length) {
                 res.json({
                     count: result[0].total,
-                    year: {
-                        min: result[0].minYear,
-                        max: result[0].maxYear
+                    params: {
+                        year: {
+                            min: result[0].minYear,
+                            max: result[0].maxYear
+                        },
                     },
                     titles: result
                 });
