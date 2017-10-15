@@ -1,5 +1,3 @@
-const Title =  require('../models/title');
-
 const getTitleQuery = require('../queries/titles/getTitle');
 const getTitlesQuery = require('../queries/titles/getTitles');
 const postTitleQuery = require('../queries/titles/postTitle');
@@ -63,12 +61,6 @@ const getTitles = function(req, res) {
             if(result.length) {
                 res.json({
                     count: result[0].total,
-                    params: {
-                        year: {
-                            min: result[0].minYear,
-                            max: result[0].maxYear
-                        },
-                    },
                     titles: result
                 });
             } else {

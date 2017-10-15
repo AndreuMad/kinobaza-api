@@ -1,14 +1,17 @@
 const Post =  require('../models/post');
 
+const postPostQuery = require('../queries/posts/postPost');
+const getPostsQuery = require('../queries/posts/getPosts');
+
 const postPost = function(req, res) {
-    const post = new Post({
+    const query = {
         image: req.body.image,
         title: req.body.title,
         date: req.body.date,
         text: req.body.text
-    });
+    };
 
-    post.save()
+    postPostQuery(query)
         .then(() => res.json({ message: 'Post created' }))
         .catch((error) => {
             res.send(error);
@@ -19,32 +22,14 @@ const getPosts = function(req, res) {
     const limit = +req.query.limit || 10;
     const skip = +req.query.skip || 0;
 
-    let count;
-
-    Post.count({})
-        .then((posts) => {
-            count = posts;
-        });
-
-    Post.find()
-        .skip(skip)
-        .limit(limit)
-        .select([
-            'id',
-            'title',
-            'image',
-            'important'
-        ])
-        .then((posts) => {
-
+    getPostsQuery({ limit, skip })
+        .then(result => {
             res.json({
-                posts: posts,
-                count: count
+                posts: result,
+                count: result[0].total
             });
         })
-        .catch((error) => {
-            res.send(error);
-        });
+        .catch(error => res.send(error));
 };
 
 const getPost = function(req, res) {
