@@ -65,7 +65,7 @@ router.route('/posts')
 // Single post
 router.route('/posts/:post_id')
     .get(postsRoutes.getPost)
-    .put(postsRoutes.putPost)
+    .put(postsRoutes.editPost)
     .delete(postsRoutes.deletePost);
 
 // Titles

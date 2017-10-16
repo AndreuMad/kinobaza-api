@@ -6,7 +6,7 @@ const PostSchema = new Schema({
         url: String
     },
     title: String,
-    date: String,
+    date: Number,
     text: String,
     textArticle: String,
     important: Boolean
