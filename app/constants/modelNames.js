@@ -1,5 +1,5 @@
 module.exports = {
-    actorModelName: 'Actor',
+    personModelName: 'Person',
     postModelName: 'Post',
     titleModelName: 'Title',
     userModelName: 'User'

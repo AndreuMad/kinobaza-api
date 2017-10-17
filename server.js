@@ -10,6 +10,7 @@ const app = express();
 
 const postsRoutes = require('./app/routes/posts');
 const titlesRoutes = require('./app/routes/titles');
+const actorsRoutes = require('./app/routes/actors');
 
 const authentication = require('./app/routes/authentication');
 const tokenLogin = require('./app/services/passport').tokenLogin;
@@ -78,6 +79,11 @@ router.route('/titles/:title_id')
     .get(titlesRoutes.getTitle)
     .put(titlesRoutes.editTitle)
     .delete(titlesRoutes.deleteTitle);
+
+// Actors
+router.route('/actors')
+    .get(actorsRoutes.getActors)
+    .post(actorsRoutes.postActor);
 
 app.use('/api', router);
 
