@@ -72,6 +72,18 @@ module.exports = ({ skip, limit }) => {
             }
         },
         {
+            $project: {
+                total: 1,
+                name: 1,
+                image: 1,
+                zodiacSign: 1,
+                birthLocation: 1,
+                titles: {
+                    '$slice': ['$titles', 1]
+                }
+            }
+        },
+        {
             $skip: skip
         },
         {
