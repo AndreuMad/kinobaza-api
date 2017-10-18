@@ -17,12 +17,6 @@ module.exports = ({ skip, limit }) => {
             }
         },
         {
-            $skip: skip
-        },
-        {
-            $limit: limit
-        },
-        {
             $project: {
                 total: 1,
                 _id: '$root._id',
@@ -34,8 +28,54 @@ module.exports = ({ skip, limit }) => {
                     url: '$root.image.url'
                 },
                 zodiacSign: '$root.zodiacSign',
-                birthLocation: '$root.birthLocation'
+                birthLocation: '$root.birthLocation',
+                titles: '$root.titles'
             }
+        },
+        {
+            $lookup: {
+                from: 'titles',
+                localField: 'titles',
+                foreignField: '_id',
+                as: 'titles'
+            }
+        },
+        {
+            $unwind: {
+                path: '$titles',
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $project: {
+                total: 1,
+                name: 1,
+                image: 1,
+                zodiacSign: 1,
+                birthLocation: 1,
+                titles: {
+                    _id: 1,
+                    image: 1,
+                    name: 1
+                }
+            }
+        },
+        {
+            $group: {
+                _id: '$_id',
+                total: { $first: '$total' },
+                name: { $first: '$name' },
+                image: { $first: '$image' },
+                zodiacSign: { $first: '$zodiacSign' },
+                birthLocation: { $first: '$birthLocation' },
+                titles: { $push: '$titles' }
+            }
+        },
+        {
+            $skip: skip
+        },
+        {
+            $limit: limit
         }
     ])
 };

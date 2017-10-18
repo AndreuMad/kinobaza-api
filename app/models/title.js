@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const titleModelName = require('../constants/modelNames').titleModelName;
+const personModelName = require('../constants/modelNames').personModelName;
+
 const TitleSchema = new Schema({
     title: {
         en: String,
@@ -15,7 +18,11 @@ const TitleSchema = new Schema({
         imdb: Number,
         average: Number
     },
-    text: String
+    text: String,
+    actors: [{
+        type: Schema.Types.ObjectId,
+        ref: personModelName
+    }]
 });
 
-module.exports = mongoose.model('Title', TitleSchema);
+module.exports = mongoose.model(titleModelName, TitleSchema);

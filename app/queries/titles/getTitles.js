@@ -23,12 +23,6 @@ module.exports = ({ query, skip, limit, sort }) => {
             }
         },
         {
-            $skip: skip
-        },
-        {
-            $limit: limit
-        },
-        {
             $project: {
                 total: 1,
                 _id: '$root._id',
@@ -45,8 +39,58 @@ module.exports = ({ query, skip, limit, sort }) => {
                 image: {
                     url: '$root.image.url'
                 },
-                genre: '$root.genre'
+                genre: '$root.genre',
+                actors: '$root.actors'
             }
+        },
+        {
+            $lookup: {
+                from: 'persons',
+                localField: 'actors',
+                foreignField: '_id',
+                as: 'actors'
+            }
+        },
+        {
+            $unwind: {
+                path: '$actors',
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $project: {
+                total: 1,
+                name: 1,
+                year: 1,
+                text: 1,
+                score: 1,
+                image: 1,
+                genre: 1,
+                actors: {
+                    _id: 1,
+                    image: 1,
+                    name: 1
+                }
+            }
+        },
+        {
+            $group: {
+                _id: '$_id',
+                total: { $first: '$total' },
+                name: { $first: '$name' },
+                year: { $first: '$year' },
+                text: { $first: '$text' },
+                score: { $first: '$score' },
+                image: { $first: '$image' },
+                genre: { $first: '$genre' },
+                actors: { $push: '$actors' }
+            }
+        },
+        {
+            $skip: skip
+        },
+        {
+            $limit: limit
         }
     ]);
 };

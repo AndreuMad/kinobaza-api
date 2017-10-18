@@ -25,18 +25,12 @@ const getActors = function(req, res) {
 
     getActorsQuery({ skip, limit })
         .then(result => {
-            if(result.length) {
-                res.json({
-                    count: result[0].total,
-                    actors: result
-                });
-            } else {
-                res.json({
-                    count: 0,
-                    titles: result
-                })
-            }
+            res.json({
+                total: result.length ? result[0].total : 0,
+                actors: result
+            });
         })
+        .catch(error => res.send(error));
 };
 
 module.exports = {

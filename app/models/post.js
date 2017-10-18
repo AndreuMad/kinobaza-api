@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const postModelName = require('../constants/modelNames').postModelName;
+
 const PostSchema = new Schema({
     image: {
         url: String
@@ -12,4 +14,4 @@ const PostSchema = new Schema({
     important: Boolean
 });
 
-module.exports = mongoose.model('Post', PostSchema);
+module.exports = mongoose.model(postModelName, PostSchema);

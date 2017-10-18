@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt-nodejs');
 
+const userModelName = require('../constants/modelNames').userModelName;
+
 const UserSchema = new Schema({
     email: {
         type: String,
@@ -44,4 +46,4 @@ UserSchema.methods.comparePassword = function(candidatePassword, callback) {
     });
 };
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model(userModelName, UserSchema);

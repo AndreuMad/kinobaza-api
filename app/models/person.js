@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const personModelName = require('../constants/modelNames').personModelName;
+const titleModelName = require('../constants/modelNames').titleModelName;
 
 const personSchema = new Schema({
     name: {
@@ -13,7 +14,11 @@ const personSchema = new Schema({
         url: String
     },
     zodiacSign: String,
-    birthLocation: String
-}, { collection: personModelName.toLowerCase() });
+    birthLocation: String,
+    titles: [{
+        type: Schema.Types.ObjectId,
+        ref: titleModelName
+    }]
+}, { collection: 'persons' });
 
 module.exports = mongoose.model(personModelName, personSchema);
