@@ -7,9 +7,6 @@ module.exports = ({ query, skip, limit, sort }) => {
             $match: query
         },
         {
-            $sort: { [sort]: 1 }
-        },
-        {
             $group: {
                 _id: null,
                 total: { $sum: 1 },
@@ -84,6 +81,12 @@ module.exports = ({ query, skip, limit, sort }) => {
                 image: { $first: '$image' },
                 genre: { $first: '$genre' },
                 actors: { $push: '$actors' }
+            }
+        },
+        {
+            $sort: {
+                [sort]: -1,
+                _id: 1
             }
         },
         {

@@ -47,7 +47,7 @@ const port = process.env.port || 8081;
 const router = express.Router();
 
 router.use(function(req, res, next) {
-    console.log('request was made');
+    //console.log('request was made');
     next();
 });
 

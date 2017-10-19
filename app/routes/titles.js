@@ -27,7 +27,7 @@ const getTitles = function(req, res) {
     const genre = req.query.genre;
     const year = req.query.year ? JSON.parse(req.query.year) : null;
     const score = req.query.score ? JSON.parse(req.query.score) : null;
-    const sort = req.query.sort || 'name';
+    const sort = req.query.sort || null;
 
     let query = {};
 
@@ -58,17 +58,12 @@ const getTitles = function(req, res) {
     getTitlesQuery({ query, skip, limit, sort })
         .then(result => {
 
-            if(result.length) {
-                res.json({
-                    count: result[0].total,
-                    titles: result
-                });
-            } else {
-                res.json({
-                    count: 0,
-                    titles: result
-                })
-            }
+            console.log('Params:', query, skip, limit, sort);
+            console.log('Result:', result.map(item => item.name.ukr));
+            res.json({
+                count: result.length ? result[0].total : 0,
+                titles: result
+            });
         })
         .catch(error => res.send(error));
 };

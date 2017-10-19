@@ -47,6 +47,11 @@ module.exports = ({ skip, limit }) => {
             }
         },
         {
+            $sort: {
+                'titles.year': -1
+            }
+        },
+        {
             $project: {
                 total: 1,
                 name: 1,
@@ -79,7 +84,7 @@ module.exports = ({ skip, limit }) => {
                 zodiacSign: 1,
                 birthLocation: 1,
                 titles: {
-                    '$slice': ['$titles', 1]
+                    '$slice': ['$titles', 5]
                 }
             }
         },
