@@ -29,6 +29,7 @@ module.exports = ({ skip, limit }) => {
                 },
                 zodiacSign: '$root.zodiacSign',
                 birthLocation: '$root.birthLocation',
+                dateOfBirth: '$root.dateOfBirth',
                 titles: '$root.titles'
             }
         },
@@ -58,6 +59,7 @@ module.exports = ({ skip, limit }) => {
                 image: 1,
                 zodiacSign: 1,
                 birthLocation: 1,
+                dateOfBirth: 1,
                 titles: {
                     _id: 1,
                     image: 1,
@@ -73,6 +75,7 @@ module.exports = ({ skip, limit }) => {
                 image: { $first: '$image' },
                 zodiacSign: { $first: '$zodiacSign' },
                 birthLocation: { $first: '$birthLocation' },
+                dateOfBirth: { $first: '$dateOfBirth' },
                 titles: { $push: '$titles' }
             }
         },
@@ -83,6 +86,8 @@ module.exports = ({ skip, limit }) => {
                 image: 1,
                 zodiacSign: 1,
                 birthLocation: 1,
+                dateOfBirth: 1,
+                titlesNumber: { $size: '$titles' },
                 titles: {
                     '$slice': ['$titles', 5]
                 }

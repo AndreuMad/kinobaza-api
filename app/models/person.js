@@ -13,6 +13,7 @@ const personSchema = new Schema({
     image: {
         url: String
     },
+    dateOfBirth: Number,
     zodiacSign: String,
     birthLocation: String,
     titles: [{
