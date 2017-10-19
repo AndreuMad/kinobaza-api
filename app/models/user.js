@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt-nodejs');
 
 const userModelName = require('../constants/modelNames').userModelName;
+const personModelName = require('../constants/modelNames').personModelName;
 
 const UserSchema = new Schema({
     email: {
@@ -13,6 +14,12 @@ const UserSchema = new Schema({
     name: {
         type: String,
         unique: true
+    },
+    favourites: {
+        actors: [{
+            type: Schema.Types.ObjectId,
+            ref: personModelName
+        }]
     },
     password: String
 });
