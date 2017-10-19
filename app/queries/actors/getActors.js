@@ -1,8 +1,11 @@
 const Actor = require('../../models/person');
 
-module.exports = ({ skip, limit }) => {
+module.exports = ({ query, skip, limit }) => {
 
     return Actor.aggregate([
+        {
+            $match: query
+        },
         {
             $group: {
                 _id: null,

@@ -20,10 +20,24 @@ const postActor = function(req, res) {
 const getActors = function(req, res) {
     const requestQuery = req.query;
 
+    const name = requestQuery.name;
     const limit = +requestQuery.limit || 3;
     const skip = +requestQuery.skip || 0;
+    let query = {};
 
-    getActorsQuery({ skip, limit })
+    if(name) {
+        query = Object.assign(
+            {
+                $or: [
+                    { "name.en": { "$regex": name, "$options": "i" } },
+                    { "name.ukr": { "$regex": name, "$options": "i" } }
+                ]
+            },
+            query
+        )
+    }
+
+    getActorsQuery({ query, skip, limit })
         .then(result => {
             res.json({
                 total: result.length ? result[0].total : 0,

@@ -58,8 +58,6 @@ const getTitles = function(req, res) {
     getTitlesQuery({ query, skip, limit, sort })
         .then(result => {
 
-            console.log('Params:', query, skip, limit, sort);
-            console.log('Result:', result.map(item => item.name.ukr));
             res.json({
                 count: result.length ? result[0].total : 0,
                 titles: result
