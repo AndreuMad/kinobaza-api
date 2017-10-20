@@ -1,6 +1,8 @@
+const mongoose = require('mongoose');
 const Actor = require('../../models/person');
+const ObjectId = mongoose.Types.ObjectId;
 
-module.exports = ({ query, skip, limit }) => {
+module.exports = ({ userId, query, skip, limit }) => {
 
     return Actor.aggregate([
         {
@@ -94,6 +96,29 @@ module.exports = ({ query, skip, limit }) => {
                 titles: {
                     '$slice': ['$titles', 5]
                 }
+            }
+        },
+
+        // Likes
+        {
+            $lookup: {
+                from : 'actorLikes',
+                localField: '_id',
+                foreignField: 'actor',
+                as: 'likes'
+            }
+        },
+        {
+            $project: {
+                total: 1,
+                name: 1,
+                image: 1,
+                zodiacSign: 1,
+                birthLocation: 1,
+                dateOfBirth: 1,
+                titlesNumber: 1,
+                titles: 1,
+                likes: { $filter: { input: '$likes', as: 'like', cond: { $eq: [ '$$like.user', ObjectId(userId) ] } } }
             }
         },
         {

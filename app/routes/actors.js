@@ -20,6 +20,7 @@ const postActor = function(req, res) {
 const getActors = function(req, res) {
     const requestQuery = req.query;
 
+    const userId = requestQuery.userId;
     const name = requestQuery.name;
     const limit = +requestQuery.limit || 3;
     const skip = +requestQuery.skip || 0;
@@ -37,7 +38,7 @@ const getActors = function(req, res) {
         )
     }
 
-    getActorsQuery({ query, skip, limit })
+    getActorsQuery({ userId, query, skip, limit })
         .then(result => {
             res.json({
                 total: result.length ? result[0].total : 0,
