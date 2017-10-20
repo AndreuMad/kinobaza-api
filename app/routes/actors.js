@@ -1,5 +1,6 @@
 const postActorQuery = require('../queries/actors/postActor');
 const getActorsQuery = require('../queries/actors/getActors');
+const likeActorQuery = require('../queries/actors/likeActor');
 
 const postActor = function(req, res) {
 
@@ -48,7 +49,14 @@ const getActors = function(req, res) {
         .catch(error => res.send(error));
 };
 
+const postLike = function(req, res) {
+    const { userId, actorId } = req.body;
+    likeActorQuery({ userId, actorId })
+        .then(result => res.send(result));
+};
+
 module.exports = {
     postActor: postActor,
-    getActors: getActors
+    getActors: getActors,
+    postLike: postLike
 };

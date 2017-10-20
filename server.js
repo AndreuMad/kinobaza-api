@@ -85,6 +85,9 @@ router.route('/actors')
     .get(actorsRoutes.getActors)
     .post(actorsRoutes.postActor);
 
+router.route('/actors/like')
+    .post(actorsRoutes.postLike);
+
 app.use('/api', router);
 
 // START THE SERVER
