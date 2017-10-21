@@ -41,9 +41,18 @@ const getActors = function(req, res) {
 
     getActorsQuery({ userId, query, skip, limit })
         .then(result => {
+            let likes = [];
+
+            result.forEach((item) => {
+                if(item.likes[0]) {
+                    likes.push(item.likes[0].actor);
+                }
+            });
+
             res.json({
                 total: result.length ? result[0].total : 0,
-                actors: result
+                actors: result,
+                likes: likes
             });
         })
         .catch(error => res.send(error));
@@ -52,7 +61,8 @@ const getActors = function(req, res) {
 const postLike = function(req, res) {
     const { userId, actorId } = req.body;
     likeActorQuery({ userId, actorId })
-        .then(result => res.send(result));
+        .then(result => res.send(result))
+        .catch(error => res.send(error));
 };
 
 module.exports = {
