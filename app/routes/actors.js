@@ -41,18 +41,12 @@ const getActors = function(req, res) {
 
     getActorsQuery({ userId, query, skip, limit })
         .then(result => {
-            let likes = [];
-
-            result.forEach((item) => {
-                if(item.likes[0]) {
-                    likes.push(item.likes[0].actor);
-                }
-            });
+            console.log(result);
 
             res.json({
                 total: result.length ? result[0].total : 0,
-                actors: result,
-                likes: likes
+                likes: result[0].likes,
+                actors: result
             });
         })
         .catch(error => res.send(error));

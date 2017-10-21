@@ -38,6 +38,8 @@ module.exports = ({ userId, query, skip, limit }) => {
                 titles: '$root.titles'
             }
         },
+
+        // Titles lookup
         {
             $lookup: {
                 from: 'titles',
@@ -98,6 +100,12 @@ module.exports = ({ userId, query, skip, limit }) => {
                 }
             }
         },
+        {
+            $skip: skip
+        },
+        {
+            $limit: limit
+        },
 
         // Likes
         {
@@ -122,10 +130,37 @@ module.exports = ({ userId, query, skip, limit }) => {
             }
         },
         {
-            $skip: skip
+            $unwind: {
+                path: '$likes',
+                preserveNullAndEmptyArrays: true
+            }
         },
         {
-            $limit: limit
+            $group: {
+                _id: null,
+                likes: { $push: '$likes.actor' },
+                root: { $push: '$$ROOT' }
+            }
+        },
+        {
+            $unwind: {
+                path: '$root',
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $project: {
+                total: '$root.total',
+                likes: 1,
+                _id: '$root._id',
+                name: '$root.name',
+                image: '$root.image',
+                zodiacSign: '$root.zodiacSign',
+                birthLocation: '$root.birthLocation',
+                dateOfBirth: '$root.dateOfBirth',
+                titlesNumber: '$root.titlesNumber',
+                titles: '$root.titles'
+            }
         }
     ])
 };
