@@ -4,5 +4,6 @@ module.exports = {
     titleModelName: 'Title',
     actorLikeModelName: 'ActorLike',
     titleActorModelName: 'TitleActor',
+    titleUserRatingModelName: 'TitleUserRating',
     userModelName: 'User'
 };

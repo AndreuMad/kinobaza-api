@@ -40,11 +40,13 @@ module.exports = ({ query, skip, limit, sort }) => {
                 actors: '$root.actors'
             }
         },
+
+        // Actors lookup
         {
             $lookup: {
-                from: 'persons',
-                localField: 'actors',
-                foreignField: '_id',
+                from: 'titleActor',
+                localField: '_id',
+                foreignField: 'title',
                 as: 'actors'
             }
         },
@@ -52,6 +54,27 @@ module.exports = ({ query, skip, limit, sort }) => {
             $unwind: {
                 path: '$actors',
                 preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $group: {
+                _id: '$_id',
+                total: { $first: '$total' },
+                name: { $first: '$name' },
+                year: { $first: '$year' },
+                text: { $first: '$text' },
+                score: { $first: '$score' },
+                image: { $first: '$image' },
+                genre: { $first: '$genre' },
+                actors: { $push: '$actors.actor' }
+            }
+        },
+        {
+            $lookup: {
+                from: 'persons',
+                localField: 'actors',
+                foreignField: '_id',
+                as: 'actors'
             }
         },
         {
@@ -68,19 +91,6 @@ module.exports = ({ query, skip, limit, sort }) => {
                     image: 1,
                     name: 1
                 }
-            }
-        },
-        {
-            $group: {
-                _id: '$_id',
-                total: { $first: '$total' },
-                name: { $first: '$name' },
-                year: { $first: '$year' },
-                text: { $first: '$text' },
-                score: { $first: '$score' },
-                image: { $first: '$image' },
-                genre: { $first: '$genre' },
-                actors: { $push: '$actors' }
             }
         },
         {
