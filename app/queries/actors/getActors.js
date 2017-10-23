@@ -42,9 +42,9 @@ module.exports = ({ userId, query, skip, limit }) => {
         // Titles lookup
         {
             $lookup: {
-                from: 'titles',
-                localField: 'titles',
-                foreignField: '_id',
+                from: 'titleActor',
+                localField: '_id',
+                foreignField: 'actor',
                 as: 'titles'
             }
         },
@@ -55,8 +55,23 @@ module.exports = ({ userId, query, skip, limit }) => {
             }
         },
         {
-            $sort: {
-                'titles.year': -1
+            $group: {
+                _id: '$_id',
+                total: { $first: '$total' },
+                name: { $first: '$name' },
+                image: { $first: '$image' },
+                zodiacSign: { $first: '$zodiacSign' },
+                birthLocation: { $first: '$birthLocation' },
+                dateOfBirth: { $first: '$dateOfBirth' },
+                titles: { $push: '$titles.title' }
+            }
+        },
+        {
+            $lookup: {
+                from: 'titles',
+                localField: 'titles',
+                foreignField: '_id',
+                as: 'titles'
             }
         },
         {
@@ -70,20 +85,14 @@ module.exports = ({ userId, query, skip, limit }) => {
                 titles: {
                     _id: 1,
                     image: 1,
-                    name: 1
+                    name: 1,
+                    year: 1
                 }
             }
         },
         {
-            $group: {
-                _id: '$_id',
-                total: { $first: '$total' },
-                name: { $first: '$name' },
-                image: { $first: '$image' },
-                zodiacSign: { $first: '$zodiacSign' },
-                birthLocation: { $first: '$birthLocation' },
-                dateOfBirth: { $first: '$dateOfBirth' },
-                titles: { $push: '$titles' }
+            $sort: {
+                'titles.year': -1
             }
         },
         {
@@ -107,7 +116,7 @@ module.exports = ({ userId, query, skip, limit }) => {
             $limit: limit
         },
 
-        // Likes
+        // Likes lookup
         {
             $lookup: {
                 from : 'actorLikes',
@@ -162,5 +171,5 @@ module.exports = ({ userId, query, skip, limit }) => {
                 titles: '$root.titles'
             }
         }
-    ])
+    ]);
 };

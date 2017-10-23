@@ -3,5 +3,6 @@ module.exports = {
     postModelName: 'Post',
     titleModelName: 'Title',
     actorLikeModelName: 'ActorLike',
+    titleActorModelName: 'TitleActor',
     userModelName: 'User'
 };
