@@ -41,8 +41,6 @@ const getActors = function(req, res) {
 
     getActorsQuery({ userId, query, skip, limit })
         .then(result => {
-            console.log(result);
-
             res.json({
                 total: result.length ? result[0].total : 0,
                 likes: result[0].likes,

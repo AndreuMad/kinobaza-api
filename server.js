@@ -80,6 +80,9 @@ router.route('/titles/:title_id')
     .put(titlesRoutes.editTitle)
     .delete(titlesRoutes.deleteTitle);
 
+router.route('/titles/rate')
+    .post(titlesRoutes.rateTitle);
+
 // Actors
 router.route('/actors')
     .get(actorsRoutes.getActors)

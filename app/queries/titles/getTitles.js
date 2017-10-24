@@ -1,6 +1,8 @@
+const mongoose = require('mongoose');
 const Title =  require('../../models/title');
+const ObjectId = mongoose.Types.ObjectId;
 
-module.exports = ({ query, skip, limit, sort }) => {
+module.exports = ({ userId, query, skip, limit, sort }) => {
 
     return Title.aggregate([
         {
@@ -91,6 +93,35 @@ module.exports = ({ query, skip, limit, sort }) => {
                     image: 1,
                     name: 1
                 }
+            }
+        },
+
+        // Rating lookup
+        {
+            $lookup: {
+                from: 'titleRating',
+                localField: '_id',
+                foreignField: 'title',
+                as: 'userRating'
+            }
+        },
+        {
+            $project: {
+                total: 1,
+                name: 1,
+                year: 1,
+                text: 1,
+                score: 1,
+                image: 1,
+                genre: 1,
+                actors: 1,
+                userRating: { $filter: { input: '$userRating', as: 'ratingItem', cond: { $eq: [ '$$ratingItem.user', ObjectId(userId) ] } } }
+            }
+        },
+        {
+            $unwind: {
+                path: '$userRating',
+                preserveNullAndEmptyArrays: true
             }
         },
         {

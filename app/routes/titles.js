@@ -3,15 +3,18 @@ const getTitlesQuery = require('../queries/titles/getTitles');
 const postTitleQuery = require('../queries/titles/postTitle');
 const editTitleQuery = require('../queries/titles/editTitle');
 const deleteTitleQuery = require('../queries/titles/deleteTitle');
+const rateTitleQuery = require('../queries/titles/rateTitle');
 
 const postTitle = function(req, res) {
+    const requestBody = req.body;
+
     const query = {
-        title: req.body.title,
-        genre: req.body.genre,
-        image: req.body.image,
-        year: req.body.year,
-        score: req.body.score,
-        text: req.body.text
+        title: requestBody.title,
+        genre: requestBody.genre,
+        image: requestBody.image,
+        year: requestBody.year,
+        score: requestBody.score,
+        text: requestBody.text
     };
 
     postTitleQuery(query)
@@ -20,14 +23,17 @@ const postTitle = function(req, res) {
 };
 
 const getTitles = function(req, res) {
-    const limit = +req.query.limit || 3;
-    const skip = +req.query.skip || 0;
+    const requestQuery = req.query;
 
-    const name = req.query.name;
-    const genre = req.query.genre;
-    const year = req.query.year ? JSON.parse(req.query.year) : null;
-    const score = req.query.score ? JSON.parse(req.query.score) : null;
-    const sort = req.query.sort || null;
+    const limit = +requestQuery.limit || 3;
+    const skip = +requestQuery.skip || 0;
+
+    const userId = requestQuery.userId;
+    const name = requestQuery.name;
+    const genre = requestQuery.genre;
+    const year = requestQuery.year ? JSON.parse(req.query.year) : null;
+    const score = requestQuery.score ? JSON.parse(req.query.score) : null;
+    const sort = requestQuery.sort || null;
 
     let query = {};
 
@@ -55,7 +61,7 @@ const getTitles = function(req, res) {
         query["score.imdb"] = { $gt: score.min, $lt: score.max };
     }
 
-    getTitlesQuery({ query, skip, limit, sort })
+    getTitlesQuery({ userId, query, skip, limit, sort })
         .then(result => {
 
             res.json({
@@ -84,10 +90,19 @@ const deleteTitle = function(req, res) {
         .catch(error => res.send(error));
 };
 
+const rateTitle = function(req, res) {
+    const { userId, titleId, rating } = req.body;
+
+    rateTitleQuery(userId, titleId, rating)
+        .then(response => res.send(response))
+        .catch(error => res.send(error));
+};
+
 module.exports = {
     postTitle: postTitle,
     getTitles: getTitles,
     getTitle: getTitle,
     editTitle: editTitle,
-    deleteTitle: deleteTitle
+    deleteTitle: deleteTitle,
+    rateTitle: rateTitle
 };
