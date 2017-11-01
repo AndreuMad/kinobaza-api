@@ -1,8 +1,9 @@
 module.exports = {
+    actorLikeModelName: 'ActorLike',
+    reviewModelName: 'Review',
     personModelName: 'Person',
     postModelName: 'Post',
     titleModelName: 'Title',
-    actorLikeModelName: 'ActorLike',
     titleActorModelName: 'TitleActor',
     titleUserRatingModelName: 'TitleUserRating',
     userModelName: 'User'

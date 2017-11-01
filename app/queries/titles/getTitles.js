@@ -119,9 +119,16 @@ module.exports = ({ userId, query, skip, limit, sort }) => {
             }
         },
         {
-            $unwind: {
-                path: '$userRating',
-                preserveNullAndEmptyArrays: true
+            $project: {
+                total: 1,
+                name: 1,
+                year: 1,
+                text: 1,
+                score: 1,
+                image: 1,
+                genre: 1,
+                actors: 1,
+                userRating: { $arrayElemAt: [ '$userRating', 0 ] }
             }
         },
         {

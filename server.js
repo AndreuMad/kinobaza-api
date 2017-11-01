@@ -1,5 +1,3 @@
-// BASE SETUP
-// =============================================================================
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -11,6 +9,7 @@ const app = express();
 const postsRoutes = require('./app/routes/posts');
 const titlesRoutes = require('./app/routes/titles');
 const actorsRoutes = require('./app/routes/actors');
+const reviewsRoutes = require('./app/routes/reviews');
 
 const authentication = require('./app/routes/authentication');
 const tokenLogin = require('./app/services/passport').tokenLogin;
@@ -90,6 +89,10 @@ router.route('/actors')
 
 router.route('/actors/like')
     .post(actorsRoutes.postLike);
+
+// Reviews
+router.route('/reviews')
+    .get(reviewsRoutes.getReviews);
 
 app.use('/api', router);
 
