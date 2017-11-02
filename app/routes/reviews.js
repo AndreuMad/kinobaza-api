@@ -3,10 +3,11 @@ const getReviewsQuery = require('../queries/reviews/getReviews');
 const getReviews = function(req, res) {
     const requestQuery = req.query;
 
+    const userId = requestQuery.userId;
     const limit = +requestQuery.limit || 3;
     const skip = +requestQuery.skip || 0;
 
-    getReviewsQuery({ skip, limit })
+    getReviewsQuery({ userId, skip, limit })
         .then(result => {
 
             res.json({

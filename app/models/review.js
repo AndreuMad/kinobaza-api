@@ -15,7 +15,8 @@ const ReviewSchema = new Schema({
         ref: titleModelName
     },
     date: Number,
-    text: String
+    isPositive: Number,
+    text: String,
 }, { collection: 'reviews' });
 
 module.exports = mongoose.model(reviewModelName, ReviewSchema);

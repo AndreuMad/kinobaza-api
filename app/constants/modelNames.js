@@ -3,6 +3,7 @@ module.exports = {
     reviewModelName: 'Review',
     personModelName: 'Person',
     postModelName: 'Post',
+    reviewUserRatingModelName: 'ReviewRating',
     titleModelName: 'Title',
     titleActorModelName: 'TitleActor',
     titleUserRatingModelName: 'TitleUserRating',
