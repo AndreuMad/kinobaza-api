@@ -44,7 +44,7 @@ const getActors = function(req, res) {
 
             res.json({
                 total: result.length ? result[0].total : 0,
-                likes: result[0].likes,
+                likes: result.length ? result[0].likes : [],
                 actors: result
             });
         })
