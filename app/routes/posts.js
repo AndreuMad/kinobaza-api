@@ -40,7 +40,14 @@ const getPosts = function(req, res) {
 const getPost = function(req, res) {
     getPostQuery(req.params.post_id)
         .then((post) => {
-            res.json(post);
+            const content = post[0];
+            let result = {};
+            result.post = content;
+            result.comments = content.comments;
+
+            delete result.post.comments;
+
+            res.json(result);
         })
         .catch((error) => {
             res.send(error);

@@ -7,5 +7,6 @@ module.exports = {
     titleModelName: 'Title',
     titleActorModelName: 'TitleActor',
     titleUserRatingModelName: 'TitleUserRating',
-    userModelName: 'User'
+    userModelName: 'User',
+    commentModelName: 'Comment'
 };

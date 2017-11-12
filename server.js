@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const app = express();
 
 const postsRoutes = require('./app/routes/posts');
+const commentsRoutes = require('./app/routes/comments');
 const titlesRoutes = require('./app/routes/titles');
 const actorsRoutes = require('./app/routes/actors');
 const reviewsRoutes = require('./app/routes/reviews');
@@ -67,6 +68,10 @@ router.route('/posts/:post_id')
     .get(postsRoutes.getPost)
     .put(postsRoutes.editPost)
     .delete(postsRoutes.deletePost);
+
+// Comments
+router.route('/comments')
+    .post(requireAuth, commentsRoutes.postComment);
 
 // Titles
 router.route('/titles')
