@@ -10,6 +10,7 @@ const UserSchema = new Schema({
         unique: true,
         lowercase: true
     },
+    avatar: String,
     name: {
         type: String,
         unique: true
