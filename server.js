@@ -6,6 +6,7 @@ const morgan = require('morgan');
 
 const app = express();
 
+const userRoutes = require('./app/routes/user');
 const postsRoutes = require('./app/routes/posts');
 const commentsRoutes = require('./app/routes/comments');
 const titlesRoutes = require('./app/routes/titles');
@@ -51,12 +52,16 @@ router.use(function(req, res, next) {
     next();
 });
 
+// User
 router.route('/signin')
     .post(requireSignin, authentication.signin)
     .get(requireAuth, authentication.signToken);
 
 router.route('/signup')
     .post(authentication.signup);
+
+router.route('/editUser')
+    .post(requireAuth, userRoutes.editUser);
 
 // Posts
 router.route('/posts')

@@ -55,6 +55,7 @@ const signin = function(req, res, next) {
     res.send({
         id: req.user._id,
         name: req.user.name,
+        dateOfBirth: req.user.dateOfBirth,
         token: tokenForUser(req.user)
     });
 };
@@ -62,7 +63,8 @@ const signin = function(req, res, next) {
 const signToken = function(req, res, next) {
     res.send({
         id: req.user._id,
-        name: req.user.name
+        name: req.user.name,
+        dateOfBirth: req.user.dateOfBirth
     });
 };
 
