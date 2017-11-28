@@ -45,6 +45,10 @@ const getPost = function(req, res) {
             result.post = content;
             result.comments = content.comments;
 
+            // if(Object.keys(content.comments[0]).length) {
+            //     result.comments = content.comments;
+            // }
+
             delete result.post.comments;
 
             res.json(result);

@@ -74,6 +74,18 @@ module.exports = (id) => {
                 textArticle: 1,
                 image: 1,
                 important: 1,
+                comments: { $filter: { input: '$comments', as: 'comment', cond: { $ne: ['$$comment', {} ] } } }
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                title: 1,
+                date: 1,
+                text: 1,
+                textArticle: 1,
+                image: 1,
+                important: 1,
                 comments: {
                     _id: 1,
                     user: {
