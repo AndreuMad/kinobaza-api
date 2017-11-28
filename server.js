@@ -31,8 +31,8 @@ mongoose.Promise = global.Promise;
 // configure app to use bodyParser()
 // this will let us get the data from a POST
 app.use(morgan('combined'));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '6.4mb'}));
+app.use(bodyParser.urlencoded({ limit: '6.4mb', extended: true }));
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
