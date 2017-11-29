@@ -13,6 +13,7 @@ const commentsRoutes = require('./app/routes/comments');
 const titlesRoutes = require('./app/routes/titles');
 const actorsRoutes = require('./app/routes/actors');
 const reviewsRoutes = require('./app/routes/reviews');
+const imageRoutes = require('./app/routes/images');
 
 const authentication = require('./app/routes/authentication');
 const tokenLogin = require('./app/services/passport').tokenLogin;
@@ -107,8 +108,12 @@ router.route('/actors/like')
 router.route('/reviews')
     .get(reviewsRoutes.getReviews);
 
-app.use('/api', router);
+// Images
+// // Avatars
+router.route('/public/img/users/avatars/:avatar')
+    .get(imageRoutes.getImage);
 
+app.use('/api', router);
 // START THE SERVER
 // =============================================================================
 app.listen(port);
