@@ -1,17 +1,22 @@
-const fs = require('fs');
+const fs = require('fs-extra');
+const Jimp = require("jimp");
+
+const editUserQuery = require('../queries/user/editUserQuery');
 const pathImg = require('../constants/paths').pathImg;
 
-const editUser = function(req, res) {
-    const { userId, name, photo, dateOfBirth } = req.body;
+const editUser = function (req, res) {
+    const {userId, name, dateOfBirth} = req.body;
+    const {photo} = req.files;
 
-    if(photo) {
-        const base64Data = photo.replace(/^data:image\/jpeg;base64,/, '');
-        const dir = `${pathImg}/users/avatars/${userId}.jpg`;
+    const distPath = `${pathImg}/users/avatars/${userId}.jpg`;
+    const tempPath = photo.path;
 
-        fs.writeFile(dir, base64Data, 'base64', function(err) {
-            console.log(err);
+    Jimp.read(tempPath)
+        .then(image => image.resize(256, Jimp.AUTO).write(distPath))
+        .then(() => fs.remove(tempPath))
+        .catch(err => {
+            console.error(err);
         });
-    }
 };
 
 module.exports = {

@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const multipart = require('connect-multiparty');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const morgan = require('morgan');
@@ -41,6 +42,8 @@ app.use(function(req, res, next) {
     next();
 });
 
+const multipartMiddleware = multipart();
+
 const port = process.env.port || 8081;
 
 // ROUTES FOR OUR API
@@ -61,7 +64,7 @@ router.route('/signup')
     .post(authentication.signup);
 
 router.route('/editUser')
-    .post(requireAuth, userRoutes.editUser);
+    .post(requireAuth, multipartMiddleware, userRoutes.editUser);
 
 // Posts
 router.route('/posts')
