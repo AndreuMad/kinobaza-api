@@ -6,7 +6,7 @@ const editUserQuery = require('../queries/user/editUserQuery');
 const pathImg = require('../constants/paths').pathImg;
 
 const editUser = function (req, res) {
-    const {userId, name, dateOfBirth} = req.body;
+    const {_id, name, dateOfBirth} = req.body;
     const data = {};
 
     if(name) {
@@ -16,8 +16,8 @@ const editUser = function (req, res) {
         data.dateOfBirth = dateOfBirth;
     }
 
-    editUserQuery(userId, data)
-        .then(() => getUserQuery(userId))
+    editUserQuery(_id, data)
+        .then(() => getUserQuery(_id))
         .then((user) => res.json(user))
         .catch(err => {
             console.error(err);
@@ -25,17 +25,17 @@ const editUser = function (req, res) {
 };
 
 const loadAvatar = function (req, res) {
-    const {userId} = req.body;
+    const {_id} = req.body;
     const {photo} = req.files;
 
-    const distPath = `${pathImg}/users/avatars/${userId}.jpg`;
+    const distPath = `${pathImg}/users/avatars/${_id}.jpg`;
     const tempPath = photo.path;
 
     Jimp.read(tempPath)
         .then(image => image.resize(256, Jimp.AUTO).write(distPath))
-        .then(() => editUserQuery(userId, {avatar: distPath}))
+        .then(() => editUserQuery(_id, {avatar: distPath}))
         .then(() => fs.remove(tempPath))
-        .then(() => getUserQuery(userId))
+        .then(() => getUserQuery(_id))
         .then((user) => res.json(user))
         .catch(err => {
             console.error(err);

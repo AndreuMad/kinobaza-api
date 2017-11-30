@@ -2,6 +2,8 @@ const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const LocalStrategy = require('passport-local');
 
+const getUserQuery = require('../queries/user/getUserQuery');
+
 const User = require('../models/user');
 const config = require('../../config');
 
@@ -50,17 +52,17 @@ const tokenLogin = new JwtStrategy(tokenOptions, function(payload, done) {
     // See if the user ID in the payload exists in our database
     // If it does, call 'done' with that user
     // Otherwise, call done without a user object
-    User.findById(payload.sub, function(error, user) {
-        if(error) {
-            return done(error, false);
-        }
-
-        if(user) {
-            done(null, user);
-        } else {
-            done(null, false);
-        }
-    });
+    getUserQuery(payload.sub)
+        .then(user => {
+            if(user) {
+                return done(null, user);
+            } else {
+                return done(null, false);
+            }
+        })
+        .catch(error => {
+            return done(error, false)
+        });
 });
 
 module.exports = {

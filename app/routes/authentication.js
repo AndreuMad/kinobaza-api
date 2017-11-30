@@ -3,6 +3,8 @@ const jwt = require('jwt-simple');
 const User = require('../models/user');
 const config = require('../../config');
 
+const getUserQuery = require('../queries/user/getUserQuery');
+
 function tokenForUser(user) {
     const timestamp = new Date().getTime();
     return jwt.encode({ sub: user.id, iat: timestamp }, config.secret);
@@ -53,19 +55,13 @@ const signin = function(req, res, next) {
     // User has already had their email and password auth'd
     // We just need to give them a token
     res.send({
-        id: req.user._id,
-        name: req.user.name,
-        dateOfBirth: req.user.dateOfBirth,
+        user: req.user,
         token: tokenForUser(req.user)
     });
 };
 
 const signToken = function(req, res, next) {
-    res.send({
-        id: req.user._id,
-        name: req.user.name,
-        dateOfBirth: req.user.dateOfBirth
-    });
+    res.send(req.user);
 };
 
 module.exports = {
