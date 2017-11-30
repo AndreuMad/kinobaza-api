@@ -38,7 +38,7 @@ app.use(bodyParser.urlencoded({ limit: '6.4mb', extended: true }));
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header('Access-Control-Allow-Methods', 'GET,POST,DELETE');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     next();
 });
@@ -64,9 +64,11 @@ router.route('/signin')
 router.route('/signup')
     .post(authentication.signup);
 
-router.route('/editUser')
-    .post(requireAuth, multipartMiddleware, userRoutes.editUser);
+router.route('/user_edit')
+    .put(requireAuth, userRoutes.editUser);
 
+router.route('/user_avatar')
+    .post(requireAuth, multipartMiddleware, userRoutes.loadAvatar);
 // Posts
 router.route('/posts')
     .get(postsRoutes.getPosts)
