@@ -43,6 +43,8 @@ app.use(function(req, res, next) {
     next();
 });
 
+app.use('/img/avatars', express.static( 'public/img/users/avatars'));
+
 const multipartMiddleware = multipart();
 
 const port = process.env.port || 8081;
