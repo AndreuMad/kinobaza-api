@@ -8,7 +8,7 @@ module.exports = ({ userId, actorId }) => {
         .then((like) => {
             if(like) {
                 return like.remove()
-                    .then(() => ({ action: 'removed', actorId }));
+                    .then(() => ({ actionType: 'removed', actorId }));
             } else {
                 const like = new ActorLike({
                     user: userId,
@@ -16,7 +16,7 @@ module.exports = ({ userId, actorId }) => {
                 });
 
                 return like.save()
-                    .then(() => ({ action: 'saved', actorId }));
+                    .then(() => ({ actionType: 'saved', actorId }));
             }
         })
         .catch(error => console.log(error));
