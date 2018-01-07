@@ -1,3 +1,3 @@
 module.exports = {
-    pathImg: './public/img'
+    pathImg: 'public/img'
 };

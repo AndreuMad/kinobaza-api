@@ -92,6 +92,7 @@ const deleteTitle = function(req, res) {
 
 const rateTitle = function(req, res) {
     const { userId, titleId, rating } = req.body;
+    console.log(userId, titleId, rating);
 
     rateTitleQuery(userId, titleId, rating)
         .then(response => res.send(response))

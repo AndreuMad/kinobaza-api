@@ -43,7 +43,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.use('/img/avatars', express.static( 'public/img/users/avatars'));
+app.use('/img/avatars', express.static( 'public/img/avatars'));
 
 const multipartMiddleware = multipart();
 
