@@ -24,6 +24,7 @@ const postTitle = function(req, res) {
 
 const getTitles = function(req, res) {
     const requestQuery = req.query;
+    console.log(requestQuery);
 
     const limit = +requestQuery.limit || 3;
     const skip = +requestQuery.skip || 0;

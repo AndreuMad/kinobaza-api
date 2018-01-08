@@ -4,10 +4,10 @@ const postCommentQuery = require('../queries/comments/postCommentQuery');
 
 const postComment = function(req, res) {
     const query = {
-        user: req.body.user,
+        user: req.body.userId,
         date: new Date().getTime(),
-        post: req.body.post,
-        text: req.body.text
+        post: req.body.postId,
+        text: req.body.comment
     };
 
     postCommentQuery(query)
