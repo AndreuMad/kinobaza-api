@@ -34,5 +34,5 @@ module.exports = ({ limit, skip }) => {
                 important: '$root.important'
             }
         }
-    ])
+    ]);
 };
